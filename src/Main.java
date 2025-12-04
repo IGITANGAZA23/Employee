@@ -1,7 +1,8 @@
-import java.util.*;
+import java.util.Scanner;
 
 class GFG {
 
+    // Simple employee data holder
     static class employee {
         String name;
         long code;
@@ -10,63 +11,80 @@ class GFG {
         int age;
     }
 
-    static int num;
-    static int max = 20;
-    static employee[] emp = new employee[max];
-    static Scanner sc = new Scanner(System.in);
+    static int num;                   // current number of employees
+    static final int max = 20;        // maximum employees
+    static final employee[] emp = new employee[max];
+    static final Scanner sc = new Scanner(System.in);
 
-    static void build() {
-        System.out.println("Build The Table\n");
-        System.out.println("Maximum Entries can be " + max);
-        System.out.println("Enter the number of Entries required:");
-        num = sc.nextInt();
-
-        if (num > max) num = max;
-
-        for (int i = 0; i < num; i++) {
-            emp[i] = new employee(); // ✅ initialize object
-
-            System.out.print("Name: ");
-            emp[i].name = sc.next();
-
-            System.out.print("Employee ID: ");
-            emp[i].code = sc.nextLong();
-
-            System.out.print("Designation: ");
-            emp[i].designation = sc.next();
-
-            System.out.print("Experience: ");
-            emp[i].exp = sc.nextInt();
-
-            System.out.print("Age: ");
-            emp[i].age = sc.nextInt();
+    // Helper to pause between actions so user can read output
+    static void pause() {
+        System.out.println("\nPress Enter to continue...");
+        sc.nextLine(); // consume the leftover newline, if any
+        if (sc.hasNextLine()) {
+            sc.nextLine();
         }
     }
 
-    static void insert() {
-        if (num < max) {
-            emp[num] = new employee(); // ✅ initialize object
+    static void build() {
+        System.out.println("\n--- Build The Employee Table ---");
+        System.out.println("Maximum entries can be " + max);
+        System.out.print("Enter the number of entries you want to create: ");
+        num = sc.nextInt();
 
-            System.out.println("Enter the information of the Employee:");
-            System.out.print("Name: ");
-            emp[num].name = sc.next();
-
-            System.out.print("Employee ID: ");
-            emp[num].code = sc.nextLong();
-
-            System.out.print("Designation: ");
-            emp[num].designation = sc.next();
-
-            System.out.print("Experience: ");
-            emp[num].exp = sc.nextInt();
-
-            System.out.print("Age: ");
-            emp[num].age = sc.nextInt();
-
-            num++;
-        } else {
-            System.out.println("Employee Table Full");
+        if (num > max) {
+            System.out.println("You entered more than " + max + ". Only " + max + " will be created.");
+            num = max;
         }
+
+        for (int i = 0; i < num; i++) {
+            emp[i] = new employee();
+
+            System.out.println("\nEmployee " + (i + 1) + ":");
+            System.out.print("  Name: ");
+            emp[i].name = sc.next();
+
+            System.out.print("  Employee ID: ");
+            emp[i].code = sc.nextLong();
+
+            System.out.print("  Designation: ");
+            emp[i].designation = sc.next();
+
+            System.out.print("  Experience (years): ");
+            emp[i].exp = sc.nextInt();
+
+            System.out.print("  Age: ");
+            emp[i].age = sc.nextInt();
+        }
+
+        System.out.println("\nEmployee table built successfully with " + num + " records.");
+    }
+
+    static void insert() {
+        if (num >= max) {
+            System.out.println("\nEmployee table is full. Cannot insert more employees.");
+            return;
+        }
+
+        emp[num] = new employee();
+        System.out.println("\n--- Insert New Employee ---");
+
+        System.out.print("  Name: ");
+        emp[num].name = sc.next();
+
+        System.out.print("  Employee ID: ");
+        emp[num].code = sc.nextLong();
+
+        System.out.print("  Designation: ");
+        emp[num].designation = sc.next();
+
+        System.out.print("  Experience (years): ");
+        emp[num].exp = sc.nextInt();
+
+        System.out.print("  Age: ");
+        emp[num].age = sc.nextInt();
+
+        num++;
+        System.out.println("\nEmployee added successfully. Total employees: " + num);
     }
 
     static void deleteIndex(int i) {
@@ -76,46 +94,58 @@ class GFG {
     }
 
     static void deleteRecord() {
-        System.out.println("Enter the Employee ID to Delete Record:");
+        if (num == 0) {
+            System.out.println("\nThere are no employees to delete.");
+            return;
+        }
+
+        System.out.print("\nEnter the Employee ID to delete: ");
         long code = sc.nextLong();
 
         for (int i = 0; i < num; i++) {
             if (emp[i].code == code) {
                 deleteIndex(i);
                 num--;
-                System.out.println("Record deleted successfully!");
+                System.out.println("Record deleted successfully. Remaining employees: " + num);
                 return;
             }
         }
-        System.out.println("Employee not found!");
+        System.out.println("Employee with ID " + code + " not found.");
     }
 
     static void searchRecord() {
-        System.out.println("Enter the Employee ID to Search Record:");
+        if (num == 0) {
+            System.out.println("\nThere are no employees to search.");
+            return;
+        }
+
+        System.out.print("\nEnter the Employee ID to search: ");
         long code = sc.nextLong();
 
         for (int i = 0; i < num; i++) {
             if (emp[i].code == code) {
-                System.out.println("---- Employee Found ----");
-                System.out.println("Name: " + emp[i].name);
-                System.out.println("Employee ID: " + emp[i].code);
-                System.out.println("Designation: " + emp[i].designation);
-                System.out.println("Experience: " + emp[i].exp);
-                System.out.println("Age: " + emp[i].age);
+                System.out.println("\n---- Employee Found ----");
+                System.out.println("  Name: " + emp[i].name);
+                System.out.println("  Employee ID: " + emp[i].code);
+                System.out.println("  Designation: " + emp[i].designation);
+                System.out.println("  Experience: " + emp[i].exp + " years");
+                System.out.println("  Age: " + emp[i].age);
                 return;
             }
         }
-        System.out.println("Employee not found!");
+        System.out.println("Employee with ID " + code + " not found.");
     }
 
     static void showMenu() {
-        System.out.println("\n--- Employee Management System ---");
-        System.out.println("1. Build Table");
-        System.out.println("2. Insert New Entry");
-        System.out.println("3. Delete Entry");
-        System.out.println("4. Search Record");
+        System.out.println("\n==================================");
+        System.out.println("       Employee Management");
+        System.out.println("==================================");
+        System.out.println("1. Build Employee Table");
+        System.out.println("2. Insert New Employee");
+        System.out.println("3. Delete Employee");
+        System.out.println("4. Search Employee");
         System.out.println("5. Exit");
-        System.out.print("Enter your choice: ");
+        System.out.print("Enter your choice (1-5): ");
 
         int option = sc.nextInt();
 
@@ -124,12 +154,23 @@ class GFG {
             case 2 -> insert();
             case 3 -> deleteRecord();
             case 4 -> searchRecord();
-            case 5 -> System.exit(0);
-            default -> System.out.println("Invalid option!");
+            case 5 -> {
+                System.out.println("\nThank you for using the Employee Management System. Goodbye!");
+                System.exit(0);
+            }
+            default -> System.out.println("\nInvalid option! Please enter a number between 1 and 5.");
         }
     }
 
     public static void main(String[] args) {
-        while (true) showMenu();
+        System.out.println("==================================");
+        System.out.println("  Welcome to Employee Management  ");
+        System.out.println("==================================");
+        System.out.println("You will now be guided by on-screen prompts.");
+
+        while (true) {
+            showMenu();
+            pause();
+        }
     }
 }
